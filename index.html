@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันล็อกพิกเซลสมบูรณ์แบบ)</title>
+    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันใส่ธงชาติ+ล็อกพิกเซล)</title>
     <style>
         /* --- สไตล์ส่วนกลางควบคุมหน้าจอ --- */
         * {
@@ -23,7 +23,7 @@
 
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 450px;
             background: rgba(0, 0, 0, 0.75);
             padding: 15px;
             border-radius: 20px;
@@ -63,7 +63,7 @@
 
         .sub-list {
             display: none;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
             gap: 8px;
             margin-bottom: 25px;
             background: rgba(255, 255, 255, 0.05);
@@ -81,6 +81,9 @@
             cursor: pointer;
             font-size: 13px;
             text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .lotto-item-btn:hover {
             background: #ffd700;
@@ -88,13 +91,12 @@
             font-weight: bold;
         }
 
-        /* --- [จุดแก้ไขตายตัว] บังคับสเกลการ์ดและตัวเลขเป็นระบบพิกเซลจำลอง (สเกลไม่เพี้ยน) --- */
+        /* --- บังคับสเกลใบแนวทางและตัวเลขไม่ให้เพี้ยนตามอุปกรณ์ --- */
         #generator-page {
             display: none;
             width: 100%;
         }
 
-        /* กล่องควบคุมอัตราส่วนรูปภาพ 2:3 (กว้าง 400 สูง 600 เสมอ) */
         .lotto-card-wrapper {
             width: 100%;
             position: relative;
@@ -103,6 +105,7 @@
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            container-type: inline-size;
         }
 
         .lotto-card {
@@ -112,11 +115,6 @@
             background-size: 100% 100%;
             background-repeat: no-repeat;
             background-position: center;
-        }
-
-        /* สั่งให้ฟอนต์ทุกตัวย่อขยายตามสัดส่วนความกว้างของการ์ดเว็บแบบเป๊ะๆ ด้วยหน่วย % และ cqi */
-        .lotto-card-wrapper {
-            container-type: inline-size;
         }
 
         .lotto-card div {
@@ -130,12 +128,12 @@
             align-items: center;
         }
 
-        /* ชื่อหวย (ซ้ายมือ - อยู่ที่เดิมขนาดใหญ่เด่นชัด) */
+        /* ชื่อหวย */
         .dynamic-title {
             top: 40%;
             left: 28%;
             transform: translate(-50%, -50%);
-            font-size: 7.5cqw; /* ปรับขนาดอิงตามความกว้างของการ์ดจริง */
+            font-size: 7.2cqw; 
             color: #6a0d0d !important;
             width: 44%;
             height: 20%;
@@ -143,7 +141,7 @@
             word-break: break-word;
         }
 
-        /* ตัวเลขวิ่ง/รูด (ช่องขวาบน) */
+        /* ตัวเลขวิ่ง/รูด */
         .box-run {
             top: 51.5%;
             left: 71.5%;
@@ -156,7 +154,7 @@
             height: 10%;
         }
 
-        /* เลข 2 ตัว (3 ช่องล่าง) - ล็อกพิกัดลงทีละบล็อกกึ่งกลางกรอบเล็ก */
+        /* เลข 2 ตัว (3 ช่องย่อยด้านล่าง) */
         .two-digit {
             top: 67.8%;
             font-size: 7cqw;
@@ -167,7 +165,7 @@
         #two-2 { left: 71.5%; transform: translate(-50%, -50%); }
         #two-3 { left: 91.5%; transform: translate(-50%, -50%); }
 
-        /* เลข 3 ตัว (2 ช่องล่างสุด) - ล็อกพิกัดลงทีละบล็อกกึ่งกลางกรอบเล็ก */
+        /* เลข 3 ตัว (2 ช่องย่อยด้านล่างสุด) */
         .three-digit {
             top: 84.7%;
             font-size: 7.2cqw;
@@ -274,8 +272,9 @@
     </div>
 
     <script>
-        const monFriList = ["ลาว Extra", "นิเคอิเช้า VIP", "นอยอาเซียน", "นิเคอิเช้า", "จีนเช้า VIP", "จีนเช้า", "ลาว TV", "ฮั่งเส็งเช้า VIP", "ฮั่งเส็งเช้า", "ฮานอย HD", "ไต้หวัน VIP", "ฮานอย STAR", "ไต้หวัน", "เกาหลี", "เกาหลี VIP", "นิเคอิบ่าย", "นิเคอิบ่าย VIP", "ลาว HD", "จีนบ่าย", "ฮานอย TV", "จีนบ่าย VIP", "ฮั่งเส็งบ่าย", "ฮั่งเส็งบ่าย VIP", "ลาวสตาร์", "สิงคโปร์", "ไทยเย็น", "ฮานอยกาชาด", "อินเดีย", "สิงคโปร์ VIP", "อียิปต์", "ฮานอยสามัคคี", "ฮานอยพิเศษ", "ฮานอยปกติ", "ฮานอย VIP", "ฮานอยพัฒนา", "ลาวพัฒนา", "ลาวสามัคคี", "ลาวอาเซียน", "ลาว VIP", "ลาวสามัคคี VIP", "อังกฤษ VIP", "ลาวสตาร์ VIP", "ฮานอย Extra", "อังกฤษ", "เยอรมัน", "รัสเซีย", "เยอรมัน VIP", "ลาวกาชาด", "รัสเซีย VIP", "ดาวโจนส์ VIP", "ดาวโจนส์ STAR", "ดาวโจนส์"];
-        const satSunList = ["ลาว Extra", "นิเคอิเช้า VIP", "นอยอาเซียน", "จีนเช้า VIP", "ลาว TV", "ฮั่งเส็งเช้า VIP", "ฮานอย HD", "ไต้หวัน VIP", "ฮานอย STAR", "เกาหลี VIP", "นิเคอิบ่าย VIP", "ลาว HD", "ฮานอย TV", "จีนบ่าย VIP", "ฮั่งเส็งบ่าย VIP", "ลาวสตาร์", "ฮานอยกาชาด", "สิงคโปร์ VIP", "ฮานอยพิเศษ", "ฮานอยสามัคคี", "ฮานอยปกติ", "ฮานอย VIP", "ฮานอยพัฒนา", "ลาวสามัคคี", "ลาวอาเซียน", "ลาว VIP", "ลาวสามัคคี VIP", "อังกฤษ VIP", "ลาวสตาร์ VIP", "ฮานอย Extra", "เยอรมัน VIP", "ลาวกาชาด", "รัสเซีย VIP", "ดาวโจนส์ VIP", "ดาวโจนส์ STAR"];
+        // เพิ่มธงชาติเข้าไปในชื่อหวยแต่ละตัวเรียบร้อยครับ
+        const monFriList = ["🇱🇦 ลาว Extra", "🇯🇵 นิเคอิเช้า VIP", "🇻🇳 นอยอาเซียน", "🇯🇵 นิเคอิเช้า", "CN จีนเช้า VIP", "🇨🇳 จีนเช้า", "🇱🇦 ลาว TV", "🇭🇰 ฮั่งเส็งเช้า VIP", "🇭🇰 ฮั่งเส็งเช้า", "🇻🇳 ฮานอย HD", "🇹🇼 ไต้หวัน VIP", "🇻🇳 ฮานอย STAR", "🇹🇼 ไต้หวัน", "🇰🇷 เกาหลี", "🇰🇷 เกาหลี VIP", "🇯🇵 นิเคอิบ่าย", "🇯🇵 นิเคอิบ่าย VIP", "🇱🇦 ลาว HD", "🇨🇳 จีนบ่าย", "🇻🇳 ฮานอย TV", "🇨🇳 จีนบ่าย VIP", "🇭🇰 ฮั่งเส็งบ่าย", "🇭🇰 ฮั่งเส็งบ่าย VIP", "🇱🇦 ลาวสตาร์", "🇸🇬 สิงคโปร์", "🇹🇭 ไทยเย็น", "🇻🇳 ฮานอยกาชาด", "🇮🇳 อินเดีย", "🇸🇬 สิงคโปร์ VIP", "🇪🇬 อียิปต์", "🇻🇳 ฮานอยสามัคคี", "🇻🇳 ฮานอยพิเศษ", "🇻🇳 ฮานอยปกติ", "🇻🇳 ฮานอย VIP", "🇻🇳 ฮานอยพัฒนา", "🇱🇦 ลาวพัฒนา", "🇱🇦 ลาวสามัคคี", "🇱🇦 ลาวอาเซียน", "🇱🇦 ลาว VIP", "🇱🇦 ลาวสามัคคี VIP", "🇬🇧 อังกฤษ VIP", "🇱🇦 ลาวสตาร์ VIP", "🇻🇳 ฮานอย Extra", "🇬🇧 อังกฤษ", "🇩🇪 เยอรมัน", "🇷🇺 รัสเซีย", "🇩🇪 เยอรมัน VIP", "🇱🇦 ลาวกาชาด", "🇷🇺 รัสเซีย VIP", "🇺🇸 ดาวโจนส์ VIP", "🇺🇸 ดาวโจนส์ STAR", "🇺🇸 ดาวโจนส์"];
+        const satSunList = ["🇱🇦 ลาว Extra", "🇯🇵 นิเคอิเช้า VIP", "🇻🇳 นอยอาเซียน", "🇨🇳 จีนเช้า VIP", "🇱🇦 ลาว TV", "🇭🇰 ฮั่งเส็งเช้า VIP", "🇻🇳 ฮานอย HD", "🇹🇼 ไต้หวัน VIP", "🇻🇳 ฮานอย STAR", "🇰🇷 เกาหลี VIP", "🇯🇵 นิเคอิบ่าย VIP", "🇱🇦 ลาว HD", "🇻🇳 ฮานอย TV", "🇨🇳 จีนบ่าย VIP", "🇭🇰 ฮั่งเส็งบ่าย VIP", "🇱🇦 ลาวสตาร์", "🇻🇳 ฮานอยกาชาด", "🇸🇬 สิงคโปร์ VIP", "🇻🇳 ฮานอยพิเศษ", "🇻🇳 ฮานอยสามัคคี", "🇻🇳 ฮานอยปกติ", "🇻🇳 ฮานอย VIP", "🇻🇳 ฮานอยพัฒนา", "🇱🇦 ลาวสามัคคี", "🇱🇦 ลาวอาเซียน", "🇱🇦 ลาว VIP", "🇱🇦 ลาวสามัคคี VIP", "🇬🇧 อังกฤษ VIP", "🇱🇦 ลาวสตาร์ VIP", "🇻🇳 ฮานอย Extra", "🇩🇪 เยอรมัน VIP", "🇱🇦 ลาวกาชาด", "🇷🇺 รัสเซีย VIP", "🇺🇸 ดาวโจนส์ VIP", "🇺🇸 ดาวโจนส์ STAR"];
         
         let currentFolder = []; 
         let currentIndex = 0;
@@ -283,12 +282,12 @@
         function renderLottoButtons() {
             const monFriContainer = document.getElementById('mon-fri');
             monFriContainer.innerHTML = monFriList.map((item, idx) => 
-                `<button class="lotto-item-btn" onclick="openGenerator('mon-fri', ${idx})">${item}</button>`
+                `<button class="lotto-item-btn" onclick="openGenerator('mon-fri', ${idx})" title="${item}">${item}</button>`
             ).join('');
 
             const satSunContainer = document.getElementById('sat-sun');
             satSunContainer.innerHTML = satSunList.map((item, idx) => 
-                `<button class="lotto-item-btn" onclick="openGenerator('sat-sun', ${idx})">${item}</button>`
+                `<button class="lotto-item-btn" onclick="openGenerator('sat-sun', ${idx})" title="${item}">${item}</button>`
             ).join('');
         }
         renderLottoButtons();
