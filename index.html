@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันแก้ไขระบบสุ่มเลข 2 ตัวสมบูรณ์)</title>
+    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันบันทึกรูปภาพได้)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* --- สไตล์ส่วนกลางควบคุมหน้าจอ --- */
         * {
@@ -209,6 +210,17 @@
         }
         .btn-spin:hover { filter: brightness(1.2); }
 
+        /* [เพิ่มใหม่] สไตล์ปุ่มบันทึกรูปภาพโทนสีเขียวเด่นสะดุดตา */
+        .btn-save {
+            background: linear-gradient(to bottom, #2ecc71, #27ae60);
+            color: white;
+            font-size: 16px;
+            padding: 12px;
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+            width: 100%;
+        }
+        .btn-save:hover { filter: brightness(1.1); }
+
         .btn-nav {
             flex: 1;
             background: linear-gradient(135deg, #ffd700, #b38600);
@@ -241,7 +253,7 @@
         <div id="generator-page">
             <h2 id="current-lotto-title">แนวทาง</h2>
             
-            <div class="lotto-card-wrapper">
+            <div class="lotto-card-wrapper" id="capture-area">
                 <div class="lotto-card">
                     <div class="dynamic-title" id="card-lotto-name">ชื่อหวย</div>
                     <div class="box-run" id="view-run">?-?</div>
@@ -257,6 +269,8 @@
 
             <div class="control-panel">
                 <button class="btn-action btn-spin" onclick="spinNumbers()">⚡ สุ่มเลขเด็ด ⚡</button>
+                
+                <button class="btn-action btn-save" onclick="saveAsImage()">💾 บันทึกรูปภาพแนวทาง</button>
                 
                 <div class="row-nav">
                     <button class="btn-action btn-nav" onclick="navigateLotto(-1)">◀️ หวยก่อนหน้า</button>
@@ -332,7 +346,6 @@
             document.getElementById('generator-page').style.display = 'none';
         }
 
-        // ระบบสุ่มเลข 2 ตัวโดยดึงเลขวิ่งรูดมาผสมด้วย 1 ตัว
         function generateTwoDigitWithRun(runNumbers) {
             let core = runNumbers[Math.floor(Math.random() * runNumbers.length)];
             let another = Math.floor(Math.random() * 10);
@@ -340,7 +353,6 @@
         }
 
         function spinNumbers() {
-            // 1. สุ่มเลขวิ่ง/รูด 2 ตัวไม่ซ้ำกันก่อน
             let run1 = Math.floor(Math.random() * 10);
             let run2 = Math.floor(Math.random() * 10);
             while(run1 === run2) { run2 = Math.floor(Math.random() * 10); }
@@ -348,12 +360,10 @@
 
             let runArray = [run1, run2];
 
-            // 2. [แก้ไขเสร็จสมบูรณ์] เรียกใช้ฟังก์ชันดึงเลขวิ่งรูดมาผสมเป็นเลข 2 ตัวแล้วใส่เข้ากล่องจริง
             let t1 = generateTwoDigitWithRun(runArray);
             let t2 = generateTwoDigitWithRun(runArray);
             let t3 = generateTwoDigitWithRun(runArray);
             
-            // ป้องกันเลขซ้ำกันใน 3 ชุด
             while(t2 === t1) { t2 = generateTwoDigitWithRun(runArray); }
             while(t3 === t1 || t3 === t2) { t3 = generateTwoDigitWithRun(runArray); }
 
@@ -361,13 +371,34 @@
             document.getElementById('two-2').innerText = t2;
             document.getElementById('two-3').innerText = t3;
 
-            // 3. สุ่มเลข 3 ตัวปกติ
             let h1 = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
             let h2 = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
             while(h2 === h1) { h2 = Math.floor(Math.random() * 1000).toString().padStart(3, '0'); }
             
             document.getElementById('three-1').innerText = h1;
             document.getElementById('three-2').innerText = h2;
+        }
+
+        /* [เพิ่มใหม่] ฟังก์ชันแปลงรหัส HTML ของตัวการ์ดใบแนวทางเซฟออกมาเป็นรูปภาพโดยเฉพาะ */
+        function saveAsImage() {
+            const targetElement = document.getElementById('capture-area');
+            const lottoName = document.getElementById('card-lotto-name').innerText;
+            
+            // เรียกคำสั่งบันทึกภาพพร้อมเปิดฟังก์ชันต้านภาพแตก (scale: 2) เพื่อความคมชัดสูง
+            html2canvas(targetElement, {
+                scale: 2, 
+                useCORS: true,
+                allowTaint: true
+            }).then(canvas => {
+                const image = canvas.toDataURL("image/png");
+                const link = document.createElement('a');
+                link.download = `แนวทาง_${lottoName}.png`; // ตั้งชื่อไฟล์ตามชื่อหวยที่เลือกอยู่ขณะนั้น
+                link.href = image;
+                link.click();
+            }).catch(err => {
+                alert("เกิดข้อผิดพลาดในการบันทึกรูปภาพ กรุณาลองใหม่อีกครั้ง");
+                console.error(err);
+            });
         }
     </script>
 </body>
