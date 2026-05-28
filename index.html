@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันล็อกพิกัดสมบูรณ์แบบ)</title>
+    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันล็อกกึ่งกลางกรอบย่อย)</title>
     <style>
         /* --- สไตล์ส่วนกลาง --- */
         body {
@@ -21,7 +21,7 @@
 
         .container {
             width: 100%;
-            max-width: 450px; /* คุมขนาดกล่องให้พอดีกับสัดส่วนมือถือและคอม */
+            max-width: 450px;
             background: rgba(0, 0, 0, 0.7);
             padding: 15px;
             border-radius: 20px;
@@ -84,13 +84,12 @@
             font-weight: bold;
         }
 
-        /* --- [แก้ไขใหม่ทั้งหมด] ล็อกสเกลหน้าใบแนวทางให้เป็นเนื้อเดียวกับรูปภาพ --- */
+        /* --- ส่วนจัดการใบแนวทางและตำแหน่งตัวเลขคงที่ --- */
         #generator-page {
             display: none;
             width: 100%;
         }
 
-        /* บังคับให้ขนาดของการ์ดคำนวณจากอัตราส่วนคงที่ (กว้าง 400px สูง 600px เสมอ แล้วใช้ CSS ย่อขนาดลงตามจอเอง) */
         .lotto-card-wrapper {
             width: 100%;
             overflow: hidden;
@@ -100,12 +99,17 @@
             background-image: url('image_ca0723.jpg');
             background-size: 100% 100%;
             background-repeat: no-repeat;
-            
-            /* ล็อกขนาดจำลองเป็นพิกเซลจริงจากรูปภาพ เพื่อให้ตำแหน่งเลขไม่เลื่อนขยับหนีรูป */
             width: 100%;
             position: relative;
             aspect-ratio: 400 / 600; 
             color: #7a0000;
+        }
+
+        /* สไตล์ตัวอักษรพื้นฐาน */
+        .lotto-card div {
+            font-weight: bold;
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8);
+            text-align: center;
         }
 
         /* ชื่อหวย */
@@ -115,12 +119,9 @@
             left: 28%;
             transform: translate(-50%, -50%);
             font-size: 1.6rem;
-            font-weight: bold;
             color: #6a0d0d;
             width: 42%;
-            text-align: center;
             line-height: 1.3;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
             word-break: break-word;
         }
 
@@ -131,47 +132,39 @@
             left: 71.5%;
             transform: translate(-50%, -50%);
             font-size: 2.6rem; 
-            font-weight: 900;
+            font-weight: 900 !important;
             letter-spacing: 10px;
             width: 50%;
-            text-align: center;
             text-indent: 10px;
-            text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.8);
         }
 
-        /* เลข 2 ตัว (3 ช่อง) บังคับพิกัดชนช่องตรงๆ */
-        .box-two-digits {
+        /* ================= [แก้ไขใหม่] ล็อกพิกัดตรงกลางกรอบย่อยของแต่ละช่อง ================= */
+        
+        /* สไตล์ร่วมของเลข 2 ตัว */
+        .two-digit-style {
             position: absolute;
-            top: 67.5%;
-            left: 47%; /* ปรับจุดเริ่มต้นขยับมาทางซ้ายเพื่อให้กระจายตัวเข้าช่องพอดี */
-            width: 49%; /* คุมหน้ากว้างรวมของกลุ่มเลข 2 ตัว */
-            display: flex;
-            justify-content: space-between;
-        }
-        .two-digit-item {
-            width: 44px; /* บังคับความกว้างบล็อกเลขให้พอดีกับช่องสี่เหลี่ยม */
-            text-align: center;
+            top: 67.5%; /* คุมระดับความสูงแนวตั้งให้อยู่กึ่งกลางสี่เหลี่ยมด้านล่าง */
+            width: 11%;  /* จำกัดความกว้างตัวเลขให้อยู่แค่ในช่องสี่เหลี่ยมย่อย */
             font-size: 1.6rem;
-            font-weight: bold;
-            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8);
         }
+        /* แยกพิกัดแนวนอน (ซ้ายไปขวา) ของเลข 2 ตัวทีละช่อง */
+        #two-1 { left: 51.5%; transform: translateX(-50%); }
+        #two-2 { left: 71.5%; transform: translateX(-50%); }
+        #two-3 { left: 91.5%; transform: translateX(-50%); }
 
-        /* เลข 3 ตัว (2 ช่อง) บังคับพิกัดชนช่องตรงๆ */
-        .box-three-digits {
+        /* สไตล์ร่วมของเลข 3 ตัว */
+        .three-digit-style {
             position: absolute;
-            top: 84.5%;
-            left: 45.5%; /* ปรับจุดเริ่มต้นของกลุ่มเลข 3 ตัว */
-            width: 52%;  /* คุมหน้ากว้างรวมของกลุ่มเลข 3 ตัว */
-            display: flex;
-            justify-content: space-between;
-        }
-        .three-digit-item {
-            width: 76px; /* บังคับความกว้างบล็อกเลขเดี่ยวให้ลงช่องสามหลักพอดี */
-            text-align: center;
+            top: 84.5%; /* คุมระดับความสูงแนวตั้งให้อยู่กึ่งกลางสี่เหลี่ยมล่างสุด */
+            width: 19%;  /* จำกัดความกว้างตัวเลขให้อยู่แค่ในช่องสี่เหลี่ยมย่อย */
             font-size: 1.7rem;
-            font-weight: bold;
-            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8);
+            letter-spacing: 1px;
         }
+        /* แยกพิกัดแนวนอน (ซ้ายไปขวา) ของเลข 3 ตัวทีละช่อง */
+        #three-1 { left: 59.5%; transform: translateX(-50%); }
+        #three-2 { left: 83.5%; transform: translateX(-50%); }
+
+        /* ========================================================================= */
 
         /* ปุ่มควบคุมส่วนล่าง */
         .control-panel {
@@ -246,16 +239,12 @@
                     <div class="dynamic-title" id="card-lotto-name">ชื่อหวย</div>
                     <div class="box-run" id="view-run">?-?</div>
                     
-                    <div class="box-two-digits">
-                        <div class="two-digit-item" id="two-1">??</div>
-                        <div class="two-digit-item" id="two-2">??</div>
-                        <div class="two-digit-item" id="two-3">??</div>
-                    </div>
+                    <div class="two-digit-style" id="two-1">??</div>
+                    <div class="two-digit-style" id="two-2">??</div>
+                    <div class="two-digit-style" id="two-3">??</div>
                     
-                    <div class="box-three-digits">
-                        <div class="three-digit-item" id="three-1">???</div>
-                        <div class="three-digit-item" id="three-2">???</div>
-                    </div>
+                    <div class="three-digit-style" id="three-1">???</div>
+                    <div class="three-digit-style" id="three-2">???</div>
                 </div>
             </div>
 
