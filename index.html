@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันสุ่มเลขอัตโนมัติ)</title>
+    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันสุ่มเลขอัตโนมัติ - พิกัดเดิม)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* --- สไตล์ส่วนกลางควบคุมหน้าจอ --- */
@@ -128,7 +128,7 @@
             align-items: center;
         }
 
-        /* ตำแหน่งชื่อหวยบนแถบสีแดงดั้งเดิม */
+        /* [กู้คืน] ใช้หน่วย cqw คุมขนาด และให้ตำแหน่งอยู่ด้านบนแถบสีแดงดั้งเดิมของมึง ไม่เด้งไม่เละแล้ว */
         .dynamic-title {
             top: 13.5%;
             left: 50%;
@@ -154,7 +154,7 @@
             letter-spacing: 2px;
         }
 
-        /* เลข 2 ตัว - ลงตรงกลางกล่องสี่เหลี่ยมแนวตั้ง 3 กล่องพอดีเป๊ะ */
+        /* เลข 2 ตัว */
         .two-digit {
             top: 67.8%;
             font-size: 7.5cqw;
@@ -165,7 +165,7 @@
         #two-2 { left: 71.5%; transform: translate(-50%, -50%); }
         #two-3 { left: 85.5%; transform: translate(-50%, -50%); }
 
-        /* เลข 3 ตัว - ลงตรงกลางกล่องสี่เหลี่ยมแนวนอน 2 กล่องล่างสุดพอดีเป๊ะ */
+        /* เลข 3 ตัว */
         .three-digit {
             top: 84.7%;
             font-size: 7.5cqw;
@@ -268,7 +268,7 @@
             </div>
 
             <div class="control-panel">
-                <button class="btn-action btn-spin" onclick="spinNumbers()">⚡ สุ่มใหม่ ⚡</button>
+                <button class="btn-action btn-spin" onclick="spinNumbers()">⚡ สุ่มเลขเด็ดใหม่ ⚡</button>
                 <button class="btn-action btn-save" onclick="saveAsImage()">💾 บันทึกรูปภาพแนวทาง</button>
                 
                 <div class="row-nav">
@@ -313,6 +313,7 @@
             document.getElementById('folder-page').style.display = 'none';
             document.getElementById('generator-page').style.display = 'block';
             updateCardDisplay();
+            spinNumbers(); // สุ่มเลขอัตโนมัติทันทีเมื่อเปิดหน้าหวยเข้ามาจากหน้าแรก
         }
 
         function updateCardDisplay() {
@@ -321,9 +322,6 @@
 
             document.getElementById('current-lotto-title').innerText = "ใบแนวทาง " + lottoNameClean;
             document.getElementById('card-lotto-name').innerText = lottoNameClean;
-            
-            // [แก้ไขจุดนี้] สั่งรันฟังก์ชันสุ่มตัวเลขทันทีที่เปิดหน้าหวยหรือกดเลื่อนหวย โดยไม่ต้องกดปุ่มสุ่มเอง
-            spinNumbers();
         }
 
         function navigateLotto(direction) {
@@ -334,6 +332,7 @@
                 currentIndex = 0;
             }
             updateCardDisplay();
+            spinNumbers(); // สุ่มเลขอัตโนมัติทันทีเมื่อกดเลื่อนหวยไปข้างหน้าหรือย้อนกลับ
         }
 
         function goBack() {
