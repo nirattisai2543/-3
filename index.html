@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันแก้ไขชื่อหวยตอนบันทึกรูป)</title>
+    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันล็อกชื่อหวยนิ่งสะดิท)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* --- สไตล์ส่วนกลางควบคุมหน้าจอ --- */
@@ -128,15 +128,18 @@
             align-items: center;
         }
 
-        /* [แก้ไขจุดนี้] ล็อกตำแหน่งชื่อหวยให้อยู่กึ่งกลางพื้นที่ว่างด้านบนของช่องขาวฝั่งซ้าย ป้องกันการเอ๋อตอนเซฟรูป */
+        /* [แก้ไขล็อกตายตัว] ดึงกลับมาใช้ cqw และจัดตำแหน่งกึ่งกลางพื้นที่ว่าง ไม่เด้งตอนกดสุ่มแน่นอน */
         .dynamic-title {
-            top: 32%;
+            top: 36%;
             left: 27.5%;
             transform: translate(-50%, -50%);
-            font-size: 7.5vw; 
-            width: 44%;
-            height: 10%;
-            line-height: 1.2;
+            font-size: 7.5cqw; 
+            width: 48%;
+            height: 12%;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            line-height: 1.1;
             word-break: break-word;
         }
 
@@ -145,7 +148,7 @@
             top: 51%;
             left: 71.3%;
             transform: translate(-50%, -50%);
-            font-size: 11vw; 
+            font-size: 11cqw; 
             font-weight: 900 !important;
             width: 50%;
             height: 10%;
@@ -155,7 +158,7 @@
         /* เลข 2 ตัว - ลงตรงกลางกล่องสี่เหลี่ยมแนวตั้ง 3 กล่องพอดีเป๊ะ */
         .two-digit {
             top: 67.8%;
-            font-size: 7.5vw;
+            font-size: 7.5cqw;
             width: 15%;
             height: 8%;
         }
@@ -166,7 +169,7 @@
         /* เลข 3 ตัว - ลงตรงกลางกล่องสี่เหลี่ยมแนวนอน 2 กล่องล่างสุดพอดีเป๊ะ */
         .three-digit {
             top: 84.7%;
-            font-size: 7.5vw;
+            font-size: 7.5cqw;
             width: 23%;
             height: 8%;
             letter-spacing: 1px;
