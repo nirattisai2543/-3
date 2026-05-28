@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันล็อกชื่อหวยเข้ากรอบขาว)</title>
+    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันคืนชีพตำแหน่งชื่อหวยเดิม)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* --- สไตล์ส่วนกลางควบคุมหน้าจอ --- */
@@ -128,16 +128,16 @@
             align-items: center;
         }
 
-        /* [แก้ไขพิกัดใหม่] ดึงชื่อหวยกลับเข้ามาอยู่ในกรอบขาวฝั่งซ้าย และขยับไปชิดด้านบนของกรอบขาวตามต้องการ */
+        /* [ดึงกลับมาตำแหน่งเดิม] ย้ายชื่อหวยขึ้นไปอยู่ด้านบนสุดตรงแถบสีแดงเหมือนตอนแรกเป๊ะๆ */
         .dynamic-title {
-            top: 47.5%;
-            left: 27.5%;
+            top: 13.5%;
+            left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 7.5cqw; 
-            width: 44%;
-            height: 9%;
-            align-items: flex-start !important; /* ดันเนื้อหาไปชิดขอบบนของพื้นที่กรอบขาว */
-            padding-top: 5px;
+            font-size: 8.5cqw; 
+            color: #ffffff !important; /* ปรับเป็นสีขาวให้อ่านง่ายบนพื้นหลังแดง */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            width: 85%;
+            height: 10%;
             line-height: 1.1;
             word-break: break-word;
         }
