@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันล็อกชื่อหวยนิ่งสะดิท)</title>
+    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันล็อกชื่อหวยเข้ากรอบขาว)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* --- สไตล์ส่วนกลางควบคุมหน้าจอ --- */
@@ -128,17 +128,16 @@
             align-items: center;
         }
 
-        /* [แก้ไขล็อกตายตัว] ดึงกลับมาใช้ cqw และจัดตำแหน่งกึ่งกลางพื้นที่ว่าง ไม่เด้งตอนกดสุ่มแน่นอน */
+        /* [แก้ไขพิกัดใหม่] ดึงชื่อหวยกลับเข้ามาอยู่ในกรอบขาวฝั่งซ้าย และขยับไปชิดด้านบนของกรอบขาวตามต้องการ */
         .dynamic-title {
-            top: 36%;
+            top: 47.5%;
             left: 27.5%;
             transform: translate(-50%, -50%);
             font-size: 7.5cqw; 
-            width: 48%;
-            height: 12%;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
+            width: 44%;
+            height: 9%;
+            align-items: flex-start !important; /* ดันเนื้อหาไปชิดขอบบนของพื้นที่กรอบขาว */
+            padding-top: 5px;
             line-height: 1.1;
             word-break: break-word;
         }
@@ -241,7 +240,6 @@
 
     <div class="container">
         
-        <!-- ================= หน้าแรก: โฟลเดอร์เลือกหวย ================= -->
         <div id="folder-page">
             <h1>🔮 ระบบเลือกใบแนวทาง 🔮</h1>
             
@@ -252,7 +250,6 @@
             <div id="sat-sun" class="sub-list"></div>
         </div>
 
-        <!-- ================= หน้าสอง: ใบแนวทางและปุ่มสุ่มตัวเลข ================= -->
         <div id="generator-page">
             <h2 id="current-lotto-title">แนวทาง</h2>
             
@@ -270,7 +267,6 @@
                 </div>
             </div>
 
-            <!-- แผงควบคุม -->
             <div class="control-panel">
                 <button class="btn-action btn-spin" onclick="spinNumbers()">⚡ สุ่มเลขเด็ด ⚡</button>
                 <button class="btn-action btn-save" onclick="saveAsImage()">💾 บันทึกรูปภาพแนวทาง</button>
