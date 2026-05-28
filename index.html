@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันปรับขนาดอัตโนมัติ)</title>
+    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันล็อกพิกัดสมบูรณ์แบบ)</title>
     <style>
         /* --- สไตล์ส่วนกลาง --- */
         body {
@@ -21,8 +21,8 @@
 
         .container {
             width: 100%;
-            max-width: 500px; /* จำกัดขนาดสูงสุดในคอมไม่ให้ใหญ่เกินไป */
-            background: rgba(0, 0, 0, 0.6);
+            max-width: 450px; /* คุมขนาดกล่องให้พอดีกับสัดส่วนมือถือและคอม */
+            background: rgba(0, 0, 0, 0.7);
             padding: 15px;
             border-radius: 20px;
             border: 2px solid #ffd700;
@@ -35,7 +35,7 @@
             color: #ffd700;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
             margin-top: 0;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
         }
 
         /* --- สไตล์หน้าแรก (โฟลเดอร์) --- */
@@ -55,7 +55,6 @@
             justify-content: center;
             align-items: center;
             gap: 10px;
-            transition: 0.2s;
         }
 
         .sub-list {
@@ -77,46 +76,45 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 13px;
-            transition: 0.2s;
             text-align: center;
         }
-
         .lotto-item-btn:hover {
             background: #ffd700;
             color: #000;
-            border-color: #ffd700;
             font-weight: bold;
         }
 
-        /* --- [จุดสำคัญ] สไตล์หน้าใบแนวทางสเกลอัตโนมัติตามหน้าจอ --- */
+        /* --- [แก้ไขใหม่ทั้งหมด] ล็อกสเกลหน้าใบแนวทางให้เป็นเนื้อเดียวกับรูปภาพ --- */
         #generator-page {
             display: none;
             width: 100%;
         }
 
-        /* คุมขนาดการ์ดหวยให้อิงตามความกว้างกล่อง แม่นยำทั้งคอมและมือถือ */
+        /* บังคับให้ขนาดของการ์ดคำนวณจากอัตราส่วนคงที่ (กว้าง 400px สูง 600px เสมอ แล้วใช้ CSS ย่อขนาดลงตามจอเอง) */
+        .lotto-card-wrapper {
+            width: 100%;
+            overflow: hidden;
+        }
+
         .lotto-card {
             background-image: url('image_ca0723.jpg');
             background-size: 100% 100%;
             background-repeat: no-repeat;
-            background-position: center;
+            
+            /* ล็อกขนาดจำลองเป็นพิกเซลจริงจากรูปภาพ เพื่อให้ตำแหน่งเลขไม่เลื่อนขยับหนีรูป */
             width: 100%;
-            aspect-ratio: 2 / 3;
             position: relative;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            aspect-ratio: 400 / 600; 
+            color: #7a0000;
         }
 
-        /* ใช้หน่วย % ในการขยายขนาดฟอนต์ (font-size) เพื่อให้หด-ขยายตามขนาดภาพอัตโนมัติ */
-        
-        /* ชื่อหวยในกรอบว่างด้านซ้าย */
+        /* ชื่อหวย */
         .dynamic-title {
             position: absolute;
             top: 40%;
             left: 28%;
             transform: translate(-50%, -50%);
-            font-size: calc(100% + 1.2vw); /* ขยายขนาดอัตโนมัติตามความกว้างจอ */
+            font-size: 1.6rem;
             font-weight: bold;
             color: #6a0d0d;
             width: 42%;
@@ -129,57 +127,49 @@
         /* ตัวเลขวิ่ง/รูด */
         .box-run {
             position: absolute;
-            top: 51.5%;
+            top: 51%;
             left: 71.5%;
             transform: translate(-50%, -50%);
-            font-size: calc(100% + 2.5vw); 
+            font-size: 2.6rem; 
             font-weight: 900;
-            letter-spacing: 0.5vw;
-            color: #7a0000;
-            text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.8);
+            letter-spacing: 10px;
             width: 50%;
             text-align: center;
+            text-indent: 10px;
+            text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.8);
         }
 
-        /* เลข 2 ตัว (3 ช่อง) จัดให้อยู่กึ่งกลางสี่เหลี่ยมพอดีทุกหน้าจอ */
+        /* เลข 2 ตัว (3 ช่อง) บังคับพิกัดชนช่องตรงๆ */
         .box-two-digits {
             position: absolute;
             top: 67.5%;
-            left: 71.2%;
-            transform: translate(-50%, -50%);
+            left: 47%; /* ปรับจุดเริ่มต้นขยับมาทางซ้ายเพื่อให้กระจายตัวเข้าช่องพอดี */
+            width: 49%; /* คุมหน้ากว้างรวมของกลุ่มเลข 2 ตัว */
             display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 50%;
-            gap: 3.2%; /* ใช้เปอร์เซ็นต์คุมระยะห่าง */
+            justify-content: space-between;
         }
         .two-digit-item {
-            flex: 1;
+            width: 44px; /* บังคับความกว้างบล็อกเลขให้พอดีกับช่องสี่เหลี่ยม */
             text-align: center;
-            font-size: calc(100% + 1.2vw);
+            font-size: 1.6rem;
             font-weight: bold;
-            color: #7a0000;
             text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8);
         }
 
-        /* เลข 3 ตัว (2 ช่อง) จัดให้อยู่กึ่งกลางสี่เหลี่ยมพอดีทุกหน้าจอ */
+        /* เลข 3 ตัว (2 ช่อง) บังคับพิกัดชนช่องตรงๆ */
         .box-three-digits {
             position: absolute;
             top: 84.5%;
-            left: 71.2%;
-            transform: translate(-50%, -50%);
+            left: 45.5%; /* ปรับจุดเริ่มต้นของกลุ่มเลข 3 ตัว */
+            width: 52%;  /* คุมหน้ากว้างรวมของกลุ่มเลข 3 ตัว */
             display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 50%;
-            gap: 3%; /* ใช้เปอร์เซ็นต์คุมระยะห่าง */
+            justify-content: space-between;
         }
         .three-digit-item {
-            flex: 1;
+            width: 76px; /* บังคับความกว้างบล็อกเลขเดี่ยวให้ลงช่องสามหลักพอดี */
             text-align: center;
-            font-size: calc(100% + 1.3vw);
+            font-size: 1.7rem;
             font-weight: bold;
-            color: #7a0000;
             text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8);
         }
 
@@ -225,7 +215,6 @@
             color: #332200;
             font-size: 14px;
         }
-        .btn-nav:hover { filter: brightness(1.1); }
 
         .btn-back {
             background: #444;
@@ -233,7 +222,6 @@
             width: 100%;
             font-size: 14px;
         }
-        .btn-back:hover { background: #555; }
     </style>
 </head>
 <body>
@@ -253,19 +241,21 @@
         <div id="generator-page">
             <h2 id="current-lotto-title">แนวทาง</h2>
             
-            <div class="lotto-card">
-                <div class="dynamic-title" id="card-lotto-name">ชื่อหวย</div>
-                <div class="box-run" id="view-run">? - ?</div>
-                
-                <div class="box-two-digits">
-                    <div class="two-digit-item" id="two-1">??</div>
-                    <div class="two-digit-item" id="two-2">??</div>
-                    <div class="two-digit-item" id="two-3">??</div>
-                </div>
-                
-                <div class="box-three-digits">
-                    <div class="three-digit-item" id="three-1">???</div>
-                    <div class="three-digit-item" id="three-2">???</div>
+            <div class="lotto-card-wrapper">
+                <div class="lotto-card">
+                    <div class="dynamic-title" id="card-lotto-name">ชื่อหวย</div>
+                    <div class="box-run" id="view-run">?-?</div>
+                    
+                    <div class="box-two-digits">
+                        <div class="two-digit-item" id="two-1">??</div>
+                        <div class="two-digit-item" id="two-2">??</div>
+                        <div class="two-digit-item" id="two-3">??</div>
+                    </div>
+                    
+                    <div class="box-three-digits">
+                        <div class="three-digit-item" id="three-1">???</div>
+                        <div class="three-digit-item" id="three-2">???</div>
+                    </div>
                 </div>
             </div>
 
@@ -321,7 +311,7 @@
             document.getElementById('current-lotto-title').innerText = "ใบแนวทาง " + lottoName;
             document.getElementById('card-lotto-name').innerText = lottoName;
             
-            document.getElementById('view-run').innerText = "? - ?";
+            document.getElementById('view-run').innerText = "?-?";
             document.getElementById('two-1').innerText = "??";
             document.getElementById('two-2').innerText = "??";
             document.getElementById('two-3').innerText = "??";
@@ -348,7 +338,7 @@
             let run1 = Math.floor(Math.random() * 10);
             let run2 = Math.floor(Math.random() * 10);
             while(run1 === run2) { run2 = Math.floor(Math.random() * 10); }
-            document.getElementById('view-run').innerText = `${run1} - ${run2}`;
+            document.getElementById('view-run').innerText = `${run1}-${run2}`;
 
             let t1 = Math.floor(Math.random() * 100).toString().padStart(2, '0');
             let t2 = Math.floor(Math.random() * 100).toString().padStart(2, '0');
