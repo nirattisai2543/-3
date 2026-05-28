@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันบันทึกรูปภาพได้)</title>
+    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันแก้ไขชื่อหวยตอนบันทึกรูป)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* --- สไตล์ส่วนกลางควบคุมหน้าจอ --- */
@@ -128,16 +128,15 @@
             align-items: center;
         }
 
-        /* ชื่อหวยชิดขอบบนของพื้นที่ว่างฝั่งซ้าย */
+        /* [แก้ไขจุดนี้] ล็อกตำแหน่งชื่อหวยให้อยู่กึ่งกลางพื้นที่ว่างด้านบนของช่องขาวฝั่งซ้าย ป้องกันการเอ๋อตอนเซฟรูป */
         .dynamic-title {
-            top: 36%;
+            top: 32%;
             left: 27.5%;
             transform: translate(-50%, -50%);
-            font-size: 7.5cqw; 
-            width: 48%;
-            height: 12%;
-            align-items: flex-start !important; 
-            line-height: 1.1;
+            font-size: 7.5vw; 
+            width: 44%;
+            height: 10%;
+            line-height: 1.2;
             word-break: break-word;
         }
 
@@ -146,7 +145,7 @@
             top: 51%;
             left: 71.3%;
             transform: translate(-50%, -50%);
-            font-size: 11cqw; 
+            font-size: 11vw; 
             font-weight: 900 !important;
             width: 50%;
             height: 10%;
@@ -156,7 +155,7 @@
         /* เลข 2 ตัว - ลงตรงกลางกล่องสี่เหลี่ยมแนวตั้ง 3 กล่องพอดีเป๊ะ */
         .two-digit {
             top: 67.8%;
-            font-size: 7.5cqw;
+            font-size: 7.5vw;
             width: 15%;
             height: 8%;
         }
@@ -167,7 +166,7 @@
         /* เลข 3 ตัว - ลงตรงกลางกล่องสี่เหลี่ยมแนวนอน 2 กล่องล่างสุดพอดีเป๊ะ */
         .three-digit {
             top: 84.7%;
-            font-size: 7.5cqw;
+            font-size: 7.5vw;
             width: 23%;
             height: 8%;
             letter-spacing: 1px;
@@ -210,7 +209,6 @@
         }
         .btn-spin:hover { filter: brightness(1.2); }
 
-        /* [เพิ่มใหม่] สไตล์ปุ่มบันทึกรูปภาพโทนสีเขียวเด่นสะดุดตา */
         .btn-save {
             background: linear-gradient(to bottom, #2ecc71, #27ae60);
             color: white;
@@ -240,6 +238,7 @@
 
     <div class="container">
         
+        <!-- ================= หน้าแรก: โฟลเดอร์เลือกหวย ================= -->
         <div id="folder-page">
             <h1>🔮 ระบบเลือกใบแนวทาง 🔮</h1>
             
@@ -250,6 +249,7 @@
             <div id="sat-sun" class="sub-list"></div>
         </div>
 
+        <!-- ================= หน้าสอง: ใบแนวทางและปุ่มสุ่มตัวเลข ================= -->
         <div id="generator-page">
             <h2 id="current-lotto-title">แนวทาง</h2>
             
@@ -267,9 +267,9 @@
                 </div>
             </div>
 
+            <!-- แผงควบคุม -->
             <div class="control-panel">
                 <button class="btn-action btn-spin" onclick="spinNumbers()">⚡ สุ่มเลขเด็ด ⚡</button>
-                
                 <button class="btn-action btn-save" onclick="saveAsImage()">💾 บันทึกรูปภาพแนวทาง</button>
                 
                 <div class="row-nav">
@@ -379,12 +379,10 @@
             document.getElementById('three-2').innerText = h2;
         }
 
-        /* [เพิ่มใหม่] ฟังก์ชันแปลงรหัส HTML ของตัวการ์ดใบแนวทางเซฟออกมาเป็นรูปภาพโดยเฉพาะ */
         function saveAsImage() {
             const targetElement = document.getElementById('capture-area');
             const lottoName = document.getElementById('card-lotto-name').innerText;
             
-            // เรียกคำสั่งบันทึกภาพพร้อมเปิดฟังก์ชันต้านภาพแตก (scale: 2) เพื่อความคมชัดสูง
             html2canvas(targetElement, {
                 scale: 2, 
                 useCORS: true,
@@ -392,7 +390,7 @@
             }).then(canvas => {
                 const image = canvas.toDataURL("image/png");
                 const link = document.createElement('a');
-                link.download = `แนวทาง_${lottoName}.png`; // ตั้งชื่อไฟล์ตามชื่อหวยที่เลือกอยู่ขณะนั้น
+                link.download = `แนวทาง_${lottoName}.png`;
                 link.href = image;
                 link.click();
             }).catch(err => {
