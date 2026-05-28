@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันสมบูรณ์)</title>
+    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันสมบูรณ์ที่สุด)</title>
     <style>
         /* --- สไตล์ส่วนกลางควบคุมหน้าจอ --- */
         * {
@@ -91,7 +91,7 @@
             font-weight: bold;
         }
 
-        /* --- บังคับสเกลใบแนวทางและตัวเลขไม่ให้เพี้ยนตามอุปกรณ์ --- */
+        /* --- โครงสร้างล็อกตำแหน่งตามรูปจริง --- */
         #generator-page {
             display: none;
             width: 100%;
@@ -100,7 +100,7 @@
         .lotto-card-wrapper {
             width: 100%;
             position: relative;
-            aspect-ratio: 400 / 600;
+            aspect-ratio: 682 / 1024; /* สัดส่วนตามรูปภาพจริง */
             margin-bottom: 15px;
             border-radius: 15px;
             overflow: hidden;
@@ -120,61 +120,58 @@
         .lotto-card div {
             position: absolute;
             font-weight: bold;
-            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8);
-            color: #7a0000;
+            color: #4a0202; 
             text-align: center;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* ชื่อหวยบนการ์ดใบแนวทาง (ไม่ใส่รูปธง ขนาดใหญ่เท่าเดิม) */
+        /* ชื่อหวย - ลงกล่องขาวฝั่งซ้ายมือใหญ่ๆ (ไม่มีธงชาติแน่นอน) */
         .dynamic-title {
-            top: 40%;
-            left: 28%;
+            top: 51%;
+            left: 27.5%;
             transform: translate(-50%, -50%);
-            font-size: 7.2cqw; 
-            color: #6a0d0d !important;
-            width: 44%;
-            height: 20%;
-            line-height: 1.2;
+            font-size: 8cqw; 
+            width: 48%;
+            height: 30%;
+            line-height: 1.3;
             word-break: break-word;
         }
 
-        /* ตัวเลขวิ่ง/รูด */
+        /* วิ่ง / รูด - กล่องขวาบน */
         .box-run {
-            top: 51.5%;
-            left: 71.5%;
+            top: 51%;
+            left: 71.3%;
             transform: translate(-50%, -50%);
             font-size: 11cqw; 
             font-weight: 900 !important;
-            letter-spacing: 5px;
-            text-indent: 5px;
-            width: 40%;
+            width: 50%;
             height: 10%;
+            letter-spacing: 2px;
         }
 
-        /* เลข 2 ตัว (3 ช่องย่อยด้านล่าง) */
+        /* เลข 2 ตัว - ลงตรงกลางกล่องสี่เหลี่ยมแนวตั้ง 3 กล่องพอดีเป๊ะ */
         .two-digit {
             top: 67.8%;
-            font-size: 7cqw;
-            width: 11%;
-            height: 7%;
+            font-size: 7.5cqw;
+            width: 15%;
+            height: 8%;
         }
-        #two-1 { left: 51.5%; transform: translate(-50%, -50%); }
+        #two-1 { left: 57.5%; transform: translate(-50%, -50%); }
         #two-2 { left: 71.5%; transform: translate(-50%, -50%); }
-        #two-3 { left: 91.5%; transform: translate(-50%, -50%); }
+        #two-3 { left: 85.5%; transform: translate(-50%, -50%); }
 
-        /* เลข 3 ตัว (2 ช่องย่อยด้านล่างสุด) */
+        /* เลข 3 ตัว - ลงตรงกลางกล่องสี่เหลี่ยมแนวนอน 2 กล่องล่างสุดพอดีเป๊ะ */
         .three-digit {
             top: 84.7%;
-            font-size: 7.2cqw;
-            width: 20%;
-            height: 7%;
+            font-size: 7.5cqw;
+            width: 23%;
+            height: 8%;
             letter-spacing: 1px;
         }
-        #three-1 { left: 59.5%; transform: translate(-50%, -50%); }
-        #three-2 { left: 83.5%; transform: translate(-50%, -50%); }
+        #three-1 { left: 61%; transform: translate(-50%, -50%); }
+        #three-2 { left: 82%; transform: translate(-50%, -50%); }
 
         /* --- ปุ่มควบคุมส่วนล่าง --- */
         .control-panel {
@@ -272,7 +269,7 @@
     </div>
 
     <script>
-        // ข้อมูลหลักสำหรับปุ่มโฟลเดอร์ (มีรูปธงชาติ)
+        // รายชื่อหวยหน้าแรก (ใส่ธงชาติปกติ)
         const monFriList = ["🇱🇦 ลาว Extra", "🇯🇵 นิเคอิเช้า VIP", "🇻🇳 นอยอาเซียน", "🇯🇵 นิเคอิเช้า", "🇨🇳 จีนเช้า VIP", "🇨🇳 จีนเช้า", "🇱🇦 ลาว TV", "🇭🇰 ฮั่งเส็งเช้า VIP", "🇭🇰 ฮั่งเส็งเช้า", "🇻🇳 ฮานอย HD", "🇹🇼 ไต้หวัน VIP", "🇻🇳 ฮานอย STAR", "🇹🇼 ไต้หวัน", "🇰🇷 เกาหลี", "🇰🇷 เกาหลี VIP", "🇯🇵 นิเคอิบ่าย", "🇯🇵 นิเคอิบ่าย VIP", "🇱🇦 ลาว HD", "🇨🇳 จีนบ่าย", "🇻🇳 ฮานอย TV", "🇨🇳 จีนบ่าย VIP", "🇭🇰 ฮั่งเส็งบ่าย", "🇭🇰 ฮั่งเส็งบ่าย VIP", "🇱🇦 ลาวสตาร์", "🇸🇬 สิงคโปร์", "🇹🇭 ไทยเย็น", "🇻🇳 ฮานอยกาชาด", "🇮🇳 อินเดีย", "🇸🇬 สิงคโปร์ VIP", "🇪🇬 อียิปต์", "🇻🇳 ฮานอยสามัคคี", "🇻🇳 ฮานอยพิเศษ", "🇻🇳 ฮานอยปกติ", "🇻🇳 ฮานอย VIP", "🇻🇳 ฮานอยพัฒนา", "🇱🇦 ลาวพัฒนา", "🇱🇦 ลาวสามัคคี", "🇱🇦 ลาวอาเซียน", "🇱🇦 ลาว VIP", "🇱🇦 ลาวสามัคคี VIP", "🇬🇧 อังกฤษ VIP", "🇱🇦 ลาวสตาร์ VIP", "🇻🇳 ฮานอย Extra", "🇬🇧 อังกฤษ", "🇩🇪 เยอรมัน", "🇷🇺 รัสเซีย", "🇩🇪 เยอรมัน VIP", "🇱🇦 ลาวกาชาด", "🇷🇺 รัสเซีย VIP", "🇺🇸 ดาวโจนส์ VIP", "🇺🇸 ดาวโจนส์ STAR", "🇺🇸 ดาวโจนส์"];
         const satSunList = ["🇱🇦 ลาว Extra", "🇯🇵 นิเคอิเช้า VIP", "🇻🇳 นอยอาเซียน", "🇨🇳 จีนเช้า VIP", "🇱🇦 ลาว TV", "🇭🇰 ฮั่งเส็งเช้า VIP", "🇻🇳 ฮานอย HD", "🇹🇼 ไต้หวัน VIP", "🇻🇳 ฮานอย STAR", "🇰🇷 เกาหลี VIP", "🇯🇵 นิเคอิบ่าย VIP", "🇱🇦 ลาว HD", "🇻🇳 ฮานอย TV", "🇨🇳 จีนบ่าย VIP", "🇭🇰 ฮั่งเส็งบ่าย VIP", "🇱🇦 ลาวสตาร์", "🇻🇳 ฮานอยกาชาด", "🇸🇬 สิงคโปร์ VIP", "🇻🇳 ฮานอยพิเศษ", "🇻🇳 ฮานอยสามัคคี", "🇻🇳 ฮานอยปกติ", "🇻🇳 ฮานอย VIP", "🇻🇳 ฮานอยพัฒนา", "🇱🇦 ลาวสามัคคี", "🇱🇦 ลาวอาเซียน", "🇱🇦 ลาว VIP", "🇱🇦 ลาวสามัคคี VIP", "🇬🇧 อังกฤษ VIP", "🇱🇦 ลาวสตาร์ VIP", "🇻🇳 ฮานอย Extra", "🇩🇪 เยอรมัน VIP", "🇱🇦 ลาวกาชาด", "🇷🇺 รัสเซีย VIP", "🇺🇸 ดาวโจนส์ VIP", "🇺🇸 ดาวโจนส์ STAR"];
         
@@ -308,11 +305,11 @@
         function updateCardDisplay() {
             let lottoNameWithFlag = currentFolder[currentIndex];
             
-            // [แก้ไข] สั่งให้ตัดรูปธงชาติออก (ลบอักขระ 2 ตัวแรกที่เป็น Emoji ธงชาติและช่องว่าง) เพื่อนำไปโชว์บนใบแนวทางแบบสะอาดตา
+            // สั่งกรองตัดรูปธงชาติออกอย่างเด็ดขาด ก่อนนำไปแสดงผลบนใบแนวทาง
             let lottoNameClean = lottoNameWithFlag.replace(/^[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]\s*/, "");
 
             document.getElementById('current-lotto-title').innerText = "ใบแนวทาง " + lottoNameClean;
-            document.getElementById('card-lotto-name').innerText = lottoNameClean;
+            document.getElementById('card-lotto-name').innerText = lottoNameClean; // แสดงชื่อหวยล้วนๆ บนภาพ
             
             document.getElementById('view-run').innerText = "?-?";
             document.getElementById('two-1').innerText = "??";
