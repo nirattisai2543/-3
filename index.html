@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันคืนชีพตำแหน่งชื่อหวยเดิม)</title>
+    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันสุ่มเลขอัตโนมัติ)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* --- สไตล์ส่วนกลางควบคุมหน้าจอ --- */
@@ -128,13 +128,13 @@
             align-items: center;
         }
 
-        /* [ดึงกลับมาตำแหน่งเดิม] ย้ายชื่อหวยขึ้นไปอยู่ด้านบนสุดตรงแถบสีแดงเหมือนตอนแรกเป๊ะๆ */
+        /* ตำแหน่งชื่อหวยบนแถบสีแดงดั้งเดิม */
         .dynamic-title {
             top: 13.5%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 8.5cqw; 
-            color: #ffffff !important; /* ปรับเป็นสีขาวให้อ่านง่ายบนพื้นหลังแดง */
+            color: #ffffff !important; 
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
             width: 85%;
             height: 10%;
@@ -268,7 +268,7 @@
             </div>
 
             <div class="control-panel">
-                <button class="btn-action btn-spin" onclick="spinNumbers()">⚡ สุ่มเลขเด็ด ⚡</button>
+                <button class="btn-action btn-spin" onclick="spinNumbers()">⚡ สุ่มใหม่ ⚡</button>
                 <button class="btn-action btn-save" onclick="saveAsImage()">💾 บันทึกรูปภาพแนวทาง</button>
                 
                 <div class="row-nav">
@@ -322,12 +322,8 @@
             document.getElementById('current-lotto-title').innerText = "ใบแนวทาง " + lottoNameClean;
             document.getElementById('card-lotto-name').innerText = lottoNameClean;
             
-            document.getElementById('view-run').innerText = "?-?";
-            document.getElementById('two-1').innerText = "??";
-            document.getElementById('two-2').innerText = "??";
-            document.getElementById('two-3').innerText = "??";
-            document.getElementById('three-1').innerText = "???";
-            document.getElementById('three-2').innerText = "???";
+            // [แก้ไขจุดนี้] สั่งรันฟังก์ชันสุ่มตัวเลขทันทีที่เปิดหน้าหวยหรือกดเลื่อนหวย โดยไม่ต้องกดปุ่มสุ่มเอง
+            spinNumbers();
         }
 
         function navigateLotto(direction) {
