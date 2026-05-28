@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันสุ่มเลขอัตโนมัติ - พิกัดเดิม)</title>
+    <title>ระบบสร้างใบแนวทาง หงส์ทองนำโชค (เวอร์ชันคืนชีพตำแหน่งชื่อหวยเดิม)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* --- สไตล์ส่วนกลางควบคุมหน้าจอ --- */
@@ -128,13 +128,13 @@
             align-items: center;
         }
 
-        /* [กู้คืน] ใช้หน่วย cqw คุมขนาด และให้ตำแหน่งอยู่ด้านบนแถบสีแดงดั้งเดิมของมึง ไม่เด้งไม่เละแล้ว */
+        /* [ดึงกลับมาตำแหน่งเดิม] ย้ายชื่อหวยขึ้นไปอยู่ด้านบนสุดตรงแถบสีแดงเหมือนตอนแรกเป๊ะๆ */
         .dynamic-title {
             top: 13.5%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 8.5cqw; 
-            color: #ffffff !important; 
+            color: #ffffff !important; /* ปรับเป็นสีขาวให้อ่านง่ายบนพื้นหลังแดง */
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
             width: 85%;
             height: 10%;
@@ -154,7 +154,7 @@
             letter-spacing: 2px;
         }
 
-        /* เลข 2 ตัว */
+        /* เลข 2 ตัว - ลงตรงกลางกล่องสี่เหลี่ยมแนวตั้ง 3 กล่องพอดีเป๊ะ */
         .two-digit {
             top: 67.8%;
             font-size: 7.5cqw;
@@ -165,7 +165,7 @@
         #two-2 { left: 71.5%; transform: translate(-50%, -50%); }
         #two-3 { left: 85.5%; transform: translate(-50%, -50%); }
 
-        /* เลข 3 ตัว */
+        /* เลข 3 ตัว - ลงตรงกลางกล่องสี่เหลี่ยมแนวนอน 2 กล่องล่างสุดพอดีเป๊ะ */
         .three-digit {
             top: 84.7%;
             font-size: 7.5cqw;
@@ -268,7 +268,7 @@
             </div>
 
             <div class="control-panel">
-                <button class="btn-action btn-spin" onclick="spinNumbers()">⚡ สุ่มเลขเด็ดใหม่ ⚡</button>
+                <button class="btn-action btn-spin" onclick="spinNumbers()">⚡ สุ่มเลขเด็ด ⚡</button>
                 <button class="btn-action btn-save" onclick="saveAsImage()">💾 บันทึกรูปภาพแนวทาง</button>
                 
                 <div class="row-nav">
@@ -313,7 +313,6 @@
             document.getElementById('folder-page').style.display = 'none';
             document.getElementById('generator-page').style.display = 'block';
             updateCardDisplay();
-            spinNumbers(); // สุ่มเลขอัตโนมัติทันทีเมื่อเปิดหน้าหวยเข้ามาจากหน้าแรก
         }
 
         function updateCardDisplay() {
@@ -322,6 +321,9 @@
 
             document.getElementById('current-lotto-title').innerText = "ใบแนวทาง " + lottoNameClean;
             document.getElementById('card-lotto-name').innerText = lottoNameClean;
+            
+            // เปลี่ยนจากเดิมที่จะเคลียร์ค่าเป็น ? ให้สั่งรันสุ่มตัวเลขชุดใหม่ขึ้นมาแทนทันทีแบบอัตโนมัติ
+            spinNumbers();
         }
 
         function navigateLotto(direction) {
@@ -332,7 +334,6 @@
                 currentIndex = 0;
             }
             updateCardDisplay();
-            spinNumbers(); // สุ่มเลขอัตโนมัติทันทีเมื่อกดเลื่อนหวยไปข้างหน้าหรือย้อนกลับ
         }
 
         function goBack() {
